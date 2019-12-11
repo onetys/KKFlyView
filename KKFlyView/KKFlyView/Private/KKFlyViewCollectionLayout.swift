@@ -1,6 +1,6 @@
 //
 //  KKFlyViewCollectionLayout.swift
-//  KKFloatWindowView
+//  KKFlyViewCollectionLayout
 //
 //  Created by 王铁山 on 2017/3/11.
 //  Copyright © 2017年 kk. All rights reserved.

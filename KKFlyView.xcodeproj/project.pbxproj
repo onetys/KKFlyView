@@ -12,7 +12,7 @@
 		A2C449FC239F4BF9006AEBBB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A2C449FB239F4BF9006AEBBB /* Assets.xcassets */; };
 		A2C449FF239F4BF9006AEBBB /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A2C449FD239F4BF9006AEBBB /* LaunchScreen.storyboard */; };
 		A2C44A1B239F790B006AEBBB /* a.png in Resources */ = {isa = PBXBuildFile; fileRef = A2C44A1A239F790B006AEBBB /* a.png */; };
-		A2C44A27239F8A4D006AEBBB /* KKFlyWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2C44A1D239F8A4D006AEBBB /* KKFlyWindow.swift */; };
+		A2C44A27239F8A4D006AEBBB /* KKFly.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2C44A1D239F8A4D006AEBBB /* KKFly.swift */; };
 		A2C44A28239F8A4D006AEBBB /* KKFlyView.bundle in Resources */ = {isa = PBXBuildFile; fileRef = A2C44A1E239F8A4D006AEBBB /* KKFlyView.bundle */; };
 		A2C44A29239F8A4D006AEBBB /* KKFlyViewItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2C44A1F239F8A4D006AEBBB /* KKFlyViewItem.swift */; };
 		A2C44A2A239F8A4D006AEBBB /* KKFlyViewCollectionLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2C44A21239F8A4D006AEBBB /* KKFlyViewCollectionLayout.swift */; };
@@ -31,7 +31,7 @@
 		A2C449FE239F4BF9006AEBBB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		A2C44A00239F4BFA006AEBBB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A2C44A1A239F790B006AEBBB /* a.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = a.png; sourceTree = "<group>"; };
-		A2C44A1D239F8A4D006AEBBB /* KKFlyWindow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KKFlyWindow.swift; sourceTree = "<group>"; };
+		A2C44A1D239F8A4D006AEBBB /* KKFly.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KKFly.swift; sourceTree = "<group>"; };
 		A2C44A1E239F8A4D006AEBBB /* KKFlyView.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = KKFlyView.bundle; sourceTree = "<group>"; };
 		A2C44A1F239F8A4D006AEBBB /* KKFlyViewItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KKFlyViewItem.swift; sourceTree = "<group>"; };
 		A2C44A21239F8A4D006AEBBB /* KKFlyViewCollectionLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KKFlyViewCollectionLayout.swift; sourceTree = "<group>"; };
@@ -86,7 +86,7 @@
 		A2C44A1C239F8A4D006AEBBB /* KKFlyView */ = {
 			isa = PBXGroup;
 			children = (
-				A2C44A1D239F8A4D006AEBBB /* KKFlyWindow.swift */,
+				A2C44A1D239F8A4D006AEBBB /* KKFly.swift */,
 				A2C44A1E239F8A4D006AEBBB /* KKFlyView.bundle */,
 				A2C44A1F239F8A4D006AEBBB /* KKFlyViewItem.swift */,
 				A2C44A20239F8A4D006AEBBB /* Private */,
@@ -185,7 +185,7 @@
 				A2C44A2E239F8A4D006AEBBB /* KKFlyViewCell.swift in Sources */,
 				A2C44A2C239F8A4D006AEBBB /* KKFlyViewModel.swift in Sources */,
 				A2C44A29239F8A4D006AEBBB /* KKFlyViewItem.swift in Sources */,
-				A2C44A27239F8A4D006AEBBB /* KKFlyWindow.swift in Sources */,
+				A2C44A27239F8A4D006AEBBB /* KKFly.swift in Sources */,
 				A2C44A2A239F8A4D006AEBBB /* KKFlyViewCollectionLayout.swift in Sources */,
 				A2C44A2D239F8A4D006AEBBB /* KKFloatSettingViewController.swift in Sources */,
 				A2C449F3239F4BF9006AEBBB /* AppDelegate.swift in Sources */,

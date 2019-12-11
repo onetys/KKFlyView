@@ -8,9 +8,9 @@
 
 import UIKit
 
-class ViewController: UIViewController, KKFLoatWindowDelegate {
+class ViewController: UIViewController, KKFlyViewDelegate {
     
-    var window: UIWindow?
+    var window: KKFly?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -18,11 +18,12 @@ class ViewController: UIViewController, KKFLoatWindowDelegate {
         view.backgroundColor = .white
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 2) {
             let items = (0..<2).map({KKFlyViewItem.init(name: "\($0)", image: UIImage(named: "a"))})
-            self.window = KKFlyWindow.defaultFloatWindow(delegate: self, items: items)
+            self.window = KKFly.getDefault(delegate: self, viewType: .view, items: items)
+            self.view.addSubview(self.window!.view)
         }
     }
-
-    func floatWindowSelectedItem(_ item: KKFlyViewItem) {
+    
+    func flyViewSelectedItem(_ item: KKFlyViewItem) {
         
     }
 

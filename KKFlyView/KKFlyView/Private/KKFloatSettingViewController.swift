@@ -1,6 +1,6 @@
 //
-//  KKFloatSettingViewController.swift
-//  KKFloatWindowView
+//  KKFlySettingViewController.swift
+//  KKFlySettingViewController
 //
 //  Created by 王铁山 on 2017/3/12.
 //  Copyright © 2017年 kk. All rights reserved.
@@ -10,7 +10,7 @@ import Foundation
 
 import UIKit
 
-open class KKFloatSettingViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate {
+open class KKFlySettingViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate {
     
     var dismissBlock: (()->Void)?
     

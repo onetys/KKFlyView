@@ -21,11 +21,13 @@ protocol KKFlyViewModelDelegate: NSObjectProtocol {
 /// 通过此类可以编辑新的功能和事件，数据管理层
 class KKFlyViewModel {
     
+    var viewType: KKFly.ViewType
+    
     var items: [KKFlyViewItem] = []
     
     weak var delegate: KKFlyViewModelDelegate?
     
-    weak var windowDelegate: KKFLoatWindowDelegate?
+    weak var windowDelegate: KKFlyViewDelegate?
     
     var cacheAllNames: [String] {
         get {
@@ -65,7 +67,8 @@ class KKFlyViewModel {
     /// 没有展开之前的 frame
     var lastFrame: CGRect!
     
-    init(delegate: KKFlyViewModelDelegate, items: [KKFlyViewItem]) {
+    init(delegate: KKFlyViewModelDelegate, viewType: KKFly.ViewType, items: [KKFlyViewItem]) {
+        self.viewType = viewType
         self.delegate = delegate
         self.items = items
         let nowNames: [String] = items.map({$0.name})
@@ -91,7 +94,7 @@ class KKFlyViewModel {
     }
     
     func selectedIndex(_ index: Int) {
-        self.windowDelegate?.floatWindowSelectedItem(self.showingItems[index])
+        self.windowDelegate?.flyViewSelectedItem(self.showingItems[index])
         self.delegate?.close()
     }
         

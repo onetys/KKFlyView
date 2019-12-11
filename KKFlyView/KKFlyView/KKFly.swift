@@ -1,6 +1,6 @@
 //
-//  KKFlyWindow.swift
-//  KKFloatWindowView
+//  KKFly.swift
+//  KKFlyView
 //
 //  Created by 王铁山 on 2017/3/9.
 //  Copyright © 2017年 kk. All rights reserved.
@@ -13,25 +13,32 @@ import Foundation
 /**
  *  浮窗回调
  */
-public protocol KKFLoatWindowDelegate: NSObjectProtocol {
+public protocol KKFlyViewDelegate: NSObjectProtocol {
     
-    func floatWindowSelectedItem(_ item: KKFlyViewItem)
+    func flyViewSelectedItem(_ item: KKFlyViewItem)
 }
 
-open class KKFlyWindow: UIWindow {
+extension KKFly {
+    
+    public enum ViewType {
+        
+        case window
+        
+        case view
+    }
+}
 
-    /// 默认功能的 window，默认大小 (2, 100, 60, 60)
-    open class func defaultFloatWindow(delegate: KKFLoatWindowDelegate, items: [KKFlyViewItem]) -> KKFlyWindow? {
-        let window = KKFlyWindow.init(frame: CGRect.init(x: 2, y: 100, width: 60, height: 60), items: items)
-        window.isHidden = false
-        window.windowLevel = .statusBar
-        window.layer.cornerRadius = 13
-        window.layer.masksToBounds = true
+open class KKFly: NSObject {
+
+    /// 默认大小 (2, 100, 60, 60)
+    open class func getDefault(delegate: KKFlyViewDelegate, viewType: KKFly.ViewType, items: [KKFlyViewItem]) -> KKFly? {
+        let window = KKFly.init(frame: CGRect.init(x: 2, y: 100, width: 60, height: 60), viewType: viewType, items: items)
         window.delegate = delegate
         return window
     }
 
-    open weak var delegate: KKFLoatWindowDelegate? {
+    /// 代理
+    open weak var delegate: KKFlyViewDelegate? {
         didSet {
             self.viewModel.windowDelegate = self.delegate
         }
@@ -40,16 +47,34 @@ open class KKFlyWindow: UIWindow {
     /// 移动窗口的手势
     open var panGestureRecognizer: UIPanGestureRecognizer!
     
-    public init(frame: CGRect, items: [KKFlyViewItem]) {
-        super.init(frame: frame)
+    open var view: UIView!
+    
+    public init(frame: CGRect, viewType: KKFly.ViewType, items: [KKFlyViewItem]) {
+        super.init()
+        
+        self.viewModel = KKFlyViewModel.init(delegate: self, viewType: viewType, items: items)
+        self.viewModel.lastFrame = frame
+        
+        if viewType == .view {
+            let v = KKView(frame: frame)
+            v.delegate = self
+            v.layer.zPosition = 10
+            v.layer.masksToBounds = true
+            self.view = v
+        } else {
+            let window = KKWindow.init(frame: frame)
+            window.delegate = self
+            window.isHidden = false
+            window.windowLevel = .statusBar
+            window.layer.cornerRadius = 13
+            window.layer.masksToBounds = true
+            self.view = window
+        }
         
         self.panGestureRecognizer = UIPanGestureRecognizer.init(target: self, action: #selector(pan(_:)))
-        self.addGestureRecognizer(self.panGestureRecognizer)
+        self.view.addGestureRecognizer(self.panGestureRecognizer)
         
         self.commitInit()
-        
-        self.viewModel = KKFlyViewModel.init(delegate: self, items: items)
-        self.viewModel.lastFrame = self.frame
     }
     
     required public init?(coder aDecoder: NSCoder) {
@@ -65,13 +90,13 @@ open class KKFlyWindow: UIWindow {
         
         self.viewModel.expending = true
         
-        self.viewModel.lastFrame = self.frame
+        self.viewModel.lastFrame = self.view.frame
         
-        self.frame = UIScreen.main.bounds
+        self.view.frame = UIScreen.main.bounds
         
         if self.meunItemsView == nil {
             self.meunItemsView = self.getMenuItemsView()
-            self.addSubview(self.meunItemsView)
+            self.view.addSubview(self.meunItemsView)
         } else {
             self.meunItemsView.isHidden = false
         }
@@ -98,13 +123,13 @@ open class KKFlyWindow: UIWindow {
             UIView.animate(withDuration: 0.25, animations: {
                 menu.frame = self.viewModel.lastFrame
             }, completion: { (finsh) in
-               self.frame = self.viewModel.lastFrame
+               self.view.frame = self.viewModel.lastFrame
                 self.menunView.isHidden = false
                 self.viewModel.lastFrame = nil
                 menu.isHidden = true
             }) 
         } else {
-            self.frame = self.viewModel.lastFrame
+            self.view.frame = self.viewModel.lastFrame
             self.menunView.isHidden = false
            self.viewModel.lastFrame = nil
         }
@@ -120,7 +145,7 @@ open class KKFlyWindow: UIWindow {
             return
         }
         self.viewModel.setting = true
-        let settingVC = KKFloatSettingViewController(items: viewModel.items, showItems: viewModel.showingItems)
+        let settingVC = KKFlySettingViewController(items: viewModel.items, showItems: viewModel.showingItems)
         settingVC.dismissBlock = { [weak self] in
             self?.viewModel.setting = false
         }
@@ -130,21 +155,50 @@ open class KKFlyWindow: UIWindow {
         self.viewModel.getValidPresentingVC()?.present(UINavigationController.init(rootViewController: settingVC), animated: true, completion: nil)
     }
     
-    // MARK: - action
+    // MARK: - private
+    
+    fileprivate var viewModel: KKFlyViewModel!
+    
+    fileprivate var menunView: KKFlyViewMenuView!
+    
+    fileprivate var meunItemsView: UIView!
+    
+    fileprivate var collectionView: UICollectionView!
+    
+    fileprivate lazy var timer: Timer = {
+        let time = Timer.init(timeInterval: 4.0, target: self, selector: #selector(timerAction), userInfo: nil, repeats: true)
+        time.fireDate = Date.distantFuture
+        RunLoop.current.add(time, forMode: .common)
+        return time
+    }()
+    
+    
+    fileprivate func commitInit() {
+        
+        self.menunView = KKFlyViewMenuView.defaultMenuView()
+        
+        self.view.addSubview(self.menunView)
+        
+        self.menunView.alpha = 0.5
+    }
+}
+
+// MARK: - action
+extension KKFly: ViewDelegate  {
     
     @objc fileprivate func timerAction() {
         UIView.animate(withDuration: 0.25, animations: {
             self.menunView.alpha = 0.5
-        }) 
+        })
         self.timer.fireDate = Date.distantFuture
     }
     
-    override open func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+    func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.timer.fireDate = Date.distantFuture
         self.menunView.alpha = 1.0
     }
     
-    override open func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+    func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         
         self.menunView.alpha = 1.0
         
@@ -170,29 +224,29 @@ open class KKFlyWindow: UIWindow {
             return
         }
         
-        let t = pan.translation(in: self)
+        let t = pan.translation(in: self.view)
         
-        let width = self.frame.size.width
+        let width = self.view.frame.size.width
         
-        let height = self.frame.size.height
+        let height = self.view.frame.size.height
         
         let swidth = UIScreen.main.bounds.width
         
         let sheight = UIScreen.main.bounds.height
         
-        let x = self.frame.origin.x
+        let x = self.view.frame.origin.x
         
-        let y = self.frame.origin.y
+        let y = self.view.frame.origin.y
         
-        self.frame = CGRect(x: x + t.x, y: y + t.y, width: width, height: height)
+        self.view.frame = CGRect(x: x + t.x, y: y + t.y, width: width, height: height)
         
-        pan.setTranslation(CGPoint.zero, in: self)
+        pan.setTranslation(CGPoint.zero, in: self.view)
         
         if pan.state == .ended || pan.state == .cancelled {
             
             self.menunView.alpha = 1.0
             
-            let center = self.center
+            let center = self.view.center
             
             self.timer.fireDate = Date().addingTimeInterval(4.0)
             
@@ -205,7 +259,7 @@ open class KKFlyWindow: UIWindow {
                     cx = swidth - width / 2.0 - 2
                 }
                 
-                if self.frame.origin.y <= 50 {
+                if self.view.frame.origin.y <= 50 {
                     cy = height / 2.0 + 22
                 } else if y >= sheight - height - 30 {
                     cy = sheight - height / 2.0 - 2
@@ -213,53 +267,19 @@ open class KKFlyWindow: UIWindow {
                     cy = y
                 }
                 
-                self.center = CGPoint.init(x: cx, y: cy)
+                self.view.center = CGPoint.init(x: cx, y: cy)
             })
         }
-    }
-
-    
-    // MARK: - private
-    
-    fileprivate var viewModel: KKFlyViewModel!
-    
-    fileprivate var menunView: KKFlyViewMenuView!
-    
-    fileprivate var meunItemsView: UIView!
-    
-    fileprivate var collectionView: KKFlyCollectionView!
-    
-    fileprivate lazy var timer: Timer = {
-        let time = Timer.init(timeInterval: 4.0, target: self, selector: #selector(timerAction), userInfo: nil, repeats: true)
-        time.fireDate = Date.distantFuture
-        RunLoop.current.add(time, forMode: .common)
-        return time
-    }()
-    
-    
-    fileprivate func commitInit() {
-        
-        self.menunView = KKFlyViewMenuView.defaultMenuView()
-        
-        self.addSubview(self.menunView)
-        
-        self.menunView.alpha = 0.5
     }
 }
 
 // MARK: - collection view
 
-extension KKFlyWindow: UICollectionViewDelegate, UICollectionViewDataSource {
+extension KKFly: UICollectionViewDelegate, UICollectionViewDataSource {
     
-    fileprivate func getCollectionView() -> KKFlyCollectionView {
+    fileprivate func getCollectionView() -> UICollectionView {
 
-        let coll = KKFlyCollectionView.init(frame: CGRect.zero, collectionViewLayout: KKFlyViewCollectionLayout())
-        
-        coll.touchBegin = {[weak self] in
-            if let wSelf = self {
-                wSelf.close()
-            }
-        }
+        let coll = UICollectionView.init(frame: CGRect.zero, collectionViewLayout: KKFlyViewCollectionLayout())
         
         coll.delegate = self
         
@@ -332,14 +352,14 @@ extension KKFlyWindow: UICollectionViewDelegate, UICollectionViewDataSource {
     }
 }
 
-extension KKFlyWindow: KKFlyViewModelDelegate {
+extension KKFly: KKFlyViewModelDelegate {
     
     public func reloadData() {
         self.collectionView.reloadData()
     }
 }
 
-open class KKFlyViewMenuView: UIView {
+fileprivate class KKFlyViewMenuView: UIView {
     
     open class func defaultMenuView() -> KKFlyViewMenuView {
         let window = KKFlyViewMenuView.init(frame: CGRect(x: 0, y: 0, width: 60, height: 60))
@@ -390,9 +410,28 @@ open class KKFlyViewMenuView: UIView {
     }
 }
 
-private class KKFlyCollectionView: UICollectionView {
+protocol ViewDelegate: class {
+    func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?)
+    func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?)
+}
+fileprivate class KKView: UIView {
     
-    var touchBegin: (()->Void)?
+    weak var delegate: ViewDelegate?
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        delegate?.touchesBegan(touches, with: event)
+    }
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        delegate?.touchesEnded(touches, with: event)
+    }
+}
+fileprivate class KKWindow: UIWindow {
+    weak var delegate: ViewDelegate?
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        delegate?.touchesBegan(touches, with: event)
+    }
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        delegate?.touchesEnded(touches, with: event)
+    }
 }
 
 fileprivate func flyViewSourcePath(name: String) -> String? {
