@@ -27,7 +27,7 @@ class KKFlyViewModel {
     
     weak var delegate: KKFlyViewModelDelegate?
     
-    weak var windowDelegate: KKFlyViewDelegate?
+    var onSelected: ((KKFlyViewItem)->Void)?
     
     var cacheAllNames: [String] {
         get {
@@ -94,8 +94,8 @@ class KKFlyViewModel {
     }
     
     func selectedIndex(_ index: Int) {
-        self.windowDelegate?.flyViewSelectedItem(self.showingItems[index])
-        self.delegate?.close()
+        onSelected?(showingItems[index])
+        delegate?.close()
     }
         
     func getValidPresentingVC() -> UIViewController? {

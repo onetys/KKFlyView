@@ -10,14 +10,6 @@ import UIKit
 
 import Foundation
 
-/**
- *  浮窗回调
- */
-public protocol KKFlyViewDelegate: NSObjectProtocol {
-    
-    func flyViewSelectedItem(_ item: KKFlyViewItem)
-}
-
 extension KKFly {
     
     public enum ViewType {
@@ -31,23 +23,29 @@ extension KKFly {
 open class KKFly: NSObject {
 
     /// 默认大小 (2, 100, 60, 60)
-    open class func getDefault(delegate: KKFlyViewDelegate, viewType: KKFly.ViewType, items: [KKFlyViewItem]) -> KKFly? {
+    open class func getDefault(viewType: KKFly.ViewType, items: [KKFlyViewItem], onSelected: ((KKFlyViewItem)->Void)?) -> KKFly {
         let window = KKFly.init(frame: CGRect.init(x: 2, y: 100, width: 60, height: 60), viewType: viewType, items: items)
-        window.delegate = delegate
+        window.onSelected = onSelected
         return window
     }
-
-    /// 代理
-    open weak var delegate: KKFlyViewDelegate? {
+    
+    open var onSelected: ((KKFlyViewItem)->Void)? {
         didSet {
-            self.viewModel.windowDelegate = self.delegate
+            viewModel.onSelected = self.onSelected
         }
     }
     
     /// 移动窗口的手势
     open var panGestureRecognizer: UIPanGestureRecognizer!
     
-    open var view: UIView!
+    @objc open var view: UIView!
+    
+    open override func value(forKeyPath keyPath: String) -> Any? {
+        if keyPath == "_view" {
+            return self.view
+        }
+        return super.value(forKeyPath: keyPath)
+    }
     
     public init(frame: CGRect, viewType: KKFly.ViewType, items: [KKFlyViewItem]) {
         super.init()
