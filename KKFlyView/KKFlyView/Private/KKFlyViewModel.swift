@@ -94,6 +94,7 @@ class KKFlyViewModel {
     }
     
     func selectedIndex(_ index: Int) {
+        guard !showingItems[index].isPHItem else { return }
         onSelected?(showingItems[index])
         delegate?.close()
     }
