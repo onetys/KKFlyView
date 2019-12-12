@@ -24,7 +24,7 @@ open class KKFly: NSObject {
 
     /// 默认大小 (2, 100, 60, 60)
     open class func getDefault(viewType: KKFly.ViewType, items: [KKFlyViewItem], onSelected: ((KKFlyViewItem)->Void)?) -> KKFly {
-        let window = KKFly.init(frame: CGRect.init(x: 2, y: 100, width: 60, height: 60), viewType: viewType, items: items)
+        let window = KKFly.init(frame: CGRect.init(x: UIScreen.main.bounds.size.width - 62, y: UIScreen.main.bounds.size.height / 2.0 - 30, width: 60, height: 60), viewType: viewType, items: items)
         window.onSelected = onSelected
         return window
     }
