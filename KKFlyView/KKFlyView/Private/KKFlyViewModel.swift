@@ -64,6 +64,9 @@ class KKFlyViewModel {
     /// 是否为展开模式
     var expending: Bool = false
     
+    /// 是否正在动画
+    var animating: Bool = false
+    
     /// 没有展开之前的 frame
     var lastFrame: CGRect!
     
