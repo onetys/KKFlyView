@@ -3,10 +3,11 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4D638A98AA6F4F8C15AC5EB0 /* Pods_KKFlyView.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F91DDC408B29CA0DF6CD6E82 /* Pods_KKFlyView.framework */; };
 		A2C449F3239F4BF9006AEBBB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2C449F2239F4BF9006AEBBB /* AppDelegate.swift */; };
 		A2C449F7239F4BF9006AEBBB /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2C449F6239F4BF9006AEBBB /* ViewController.swift */; };
 		A2C449FC239F4BF9006AEBBB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A2C449FB239F4BF9006AEBBB /* Assets.xcassets */; };
@@ -21,9 +22,11 @@
 		A2C44A2D239F8A4D006AEBBB /* KKFloatSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2C44A24239F8A4D006AEBBB /* KKFloatSettingViewController.swift */; };
 		A2C44A2E239F8A4D006AEBBB /* KKFlyViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2C44A25239F8A4D006AEBBB /* KKFlyViewCell.swift */; };
 		A2C44A2F239F8A4D006AEBBB /* KKFlyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2C44A26239F8A4D006AEBBB /* KKFlyView.swift */; };
+		A2F1D0FE23A91D1300A0A8CC /* DUFlyLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2F1D0FD23A91D1300A0A8CC /* DUFlyLog.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		8106BFD83CAC289808F80F0E /* Pods-KKFlyView.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-KKFlyView.debug.xcconfig"; path = "Target Support Files/Pods-KKFlyView/Pods-KKFlyView.debug.xcconfig"; sourceTree = "<group>"; };
 		A2C449EF239F4BF9006AEBBB /* KKFlyView.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = KKFlyView.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A2C449F2239F4BF9006AEBBB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A2C449F6239F4BF9006AEBBB /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -40,6 +43,9 @@
 		A2C44A24239F8A4D006AEBBB /* KKFloatSettingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KKFloatSettingViewController.swift; sourceTree = "<group>"; };
 		A2C44A25239F8A4D006AEBBB /* KKFlyViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KKFlyViewCell.swift; sourceTree = "<group>"; };
 		A2C44A26239F8A4D006AEBBB /* KKFlyView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KKFlyView.swift; sourceTree = "<group>"; };
+		A2F1D0FD23A91D1300A0A8CC /* DUFlyLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DUFlyLog.swift; sourceTree = "<group>"; };
+		C1784F1727B6CC5BCAB7D8E9 /* Pods-KKFlyView.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-KKFlyView.release.xcconfig"; path = "Target Support Files/Pods-KKFlyView/Pods-KKFlyView.release.xcconfig"; sourceTree = "<group>"; };
+		F91DDC408B29CA0DF6CD6E82 /* Pods_KKFlyView.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_KKFlyView.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -47,17 +53,28 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4D638A98AA6F4F8C15AC5EB0 /* Pods_KKFlyView.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		547C26EC1B72E3F20DB48C9B /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				F91DDC408B29CA0DF6CD6E82 /* Pods_KKFlyView.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		A2C449E6239F4BF9006AEBBB = {
 			isa = PBXGroup;
 			children = (
 				A2C449F1239F4BF9006AEBBB /* KKFlyView */,
 				A2C449F0239F4BF9006AEBBB /* Products */,
+				DBB05BBD9B3EC2E9BF158CBF /* Pods */,
+				547C26EC1B72E3F20DB48C9B /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -75,6 +92,7 @@
 				A2C44A1A239F790B006AEBBB /* a.png */,
 				A2C449F2239F4BF9006AEBBB /* AppDelegate.swift */,
 				A2C449F6239F4BF9006AEBBB /* ViewController.swift */,
+				A2F1D0FD23A91D1300A0A8CC /* DUFlyLog.swift */,
 				A2C44A1C239F8A4D006AEBBB /* KKFlyView */,
 				A2C449FB239F4BF9006AEBBB /* Assets.xcassets */,
 				A2C449FD239F4BF9006AEBBB /* LaunchScreen.storyboard */,
@@ -107,6 +125,15 @@
 			path = Private;
 			sourceTree = "<group>";
 		};
+		DBB05BBD9B3EC2E9BF158CBF /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				8106BFD83CAC289808F80F0E /* Pods-KKFlyView.debug.xcconfig */,
+				C1784F1727B6CC5BCAB7D8E9 /* Pods-KKFlyView.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -114,9 +141,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = A2C44A03239F4BFA006AEBBB /* Build configuration list for PBXNativeTarget "KKFlyView" */;
 			buildPhases = (
+				F06D5D2B8D4E12A764F7CB81 /* [CP] Check Pods Manifest.lock */,
 				A2C449EB239F4BF9006AEBBB /* Sources */,
 				A2C449EC239F4BF9006AEBBB /* Frameworks */,
 				A2C449ED239F4BF9006AEBBB /* Resources */,
+				817D76E83C362FF75D2F70C5 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -174,6 +203,48 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		817D76E83C362FF75D2F70C5 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-KKFlyView/Pods-KKFlyView-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-KKFlyView/Pods-KKFlyView-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-KKFlyView/Pods-KKFlyView-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		F06D5D2B8D4E12A764F7CB81 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-KKFlyView-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		A2C449EB239F4BF9006AEBBB /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -181,6 +252,7 @@
 			files = (
 				A2C44A2F239F8A4D006AEBBB /* KKFlyView.swift in Sources */,
 				A2C449F7239F4BF9006AEBBB /* ViewController.swift in Sources */,
+				A2F1D0FE23A91D1300A0A8CC /* DUFlyLog.swift in Sources */,
 				A2C44A2B239F8A4D006AEBBB /* KKFlyViewItemExtension.swift in Sources */,
 				A2C44A2E239F8A4D006AEBBB /* KKFlyViewCell.swift in Sources */,
 				A2C44A2C239F8A4D006AEBBB /* KKFlyViewModel.swift in Sources */,
@@ -322,6 +394,7 @@
 		};
 		A2C44A04239F4BFA006AEBBB /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 8106BFD83CAC289808F80F0E /* Pods-KKFlyView.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
@@ -341,6 +414,7 @@
 		};
 		A2C44A05239F4BFA006AEBBB /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C1784F1727B6CC5BCAB7D8E9 /* Pods-KKFlyView.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;

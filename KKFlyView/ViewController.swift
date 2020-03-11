@@ -8,16 +8,24 @@
 
 import UIKit
 
+import Alamofire
+
 class ViewController: UIViewController {
     
     var window: KKFly?
     
     var tf: UITextField = UITextField.init(frame: .zero)
+    
+    var log: DUFlyLog = DUFlyLog()
+    
+    let manager = SessionManager.init()
 
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         
+        log.start()
+      
         tf.frame = .init(x: 10, y: 100, width: 100, height: 50)
         view.addSubview(tf)
         
@@ -27,17 +35,24 @@ class ViewController: UIViewController {
             self.window = KKFly.getDefault(viewType: .window, items: items, onSelected: { [weak self] (item) in
                 self?.flyViewSelectedItem(item)
             })
-            self.view.addSubview(self.window!.view)
         }
     }
+	
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        tf.becomeFirstResponder()
+        
+        let request = manager.request(URL(string: "https://apk.poizon.com/du_rn/config/ios_release.json")!,
+                                            method: HTTPMethod.get,
+                                            parameters: nil,
+                                            encoding: JSONEncoding.default,
+                                            headers: ["token": "hhh"])
+        request.resume()
+		
     }
     
     func flyViewSelectedItem(_ item: KKFlyViewItem) {
-        
+        log.showLog()
     }
 
 }

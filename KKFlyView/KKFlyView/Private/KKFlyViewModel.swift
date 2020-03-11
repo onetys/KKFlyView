@@ -74,12 +74,29 @@ class KKFlyViewModel {
         self.viewType = viewType
         self.delegate = delegate
         self.items = items
+		// now
         let nowNames: [String] = items.map({$0.name})
+		// cache all name
+		var cacheAllNames = self.cacheAllNames
+		if cacheAllNames.isEmpty {
+			cacheAllNames = nowNames
+		}
+		// cache
         var cacheNames = cacheShowingNames
+		// cache empty, show all now
         if cacheNames.isEmpty {
-            cacheNames = Array<KKFlyViewItem>.init(repeating: KKFlyViewItem.phItem(), count: 6).map({$0.name})
+            cacheNames = nowNames
         }
+		// count less, add ph
+		if cacheNames.count < 6 {
+			let phName = KKFlyViewItem.phItem().name
+			for _ in 0..<(6-cacheNames.count) {
+				cacheNames.append(phName)
+			}
+		}
+		// delete abandoned
         cacheNames = cacheNames.filter({KKFlyViewItem.isPHItem(name: $0) || nowNames.contains($0)})
+		// increase name
         var addNames: [String] = nowNames.filter({!cacheAllNames.contains($0)})
         cacheNames = cacheNames.map({ (name) -> String in
             if KKFlyViewItem.isPHItem(name: name) && !addNames.isEmpty {
@@ -88,8 +105,15 @@ class KKFlyViewModel {
                 return name
             }
         })
+		if cacheNames.count < 6 {
+			for _ in 0..<(6 - cacheNames.count) {
+				if !addNames.isEmpty {
+					cacheNames.append(addNames.popLast()!)
+				}
+			}
+		}
         cacheShowingNames = cacheNames
-        cacheAllNames = items.map({$0.name})
+        cacheAllNames = nowNames
     }
     
     func updateShowingItems(items: [KKFlyViewItem]) {
