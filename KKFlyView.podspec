@@ -4,7 +4,7 @@ Pod::Spec.new do |spec|
 
   spec.name         = "KKFlyView"
 
-  spec.version      = '1.1.4'
+  spec.version      = '1.1.5'
 
   spec.summary      = "fly window and fly view"
 

@@ -28,22 +28,24 @@ class KKFlyViewModel {
     weak var delegate: KKFlyViewModelDelegate?
     
     var onSelected: ((KKFlyViewItem)->Void)?
+	
+	var project_key: String = "default"
     
     var cacheAllNames: [String] {
         get {
-            return (UserDefaults.standard.value(forKey: "com.onety.fly.allname") as? [String]) ?? []
+            return (UserDefaults.standard.value(forKey: "com.onety.fly.\(project_key).allname") as? [String]) ?? []
         }
         set {
-            UserDefaults.standard.setValue(newValue, forKey: "com.onety.fly.allname")
+            UserDefaults.standard.setValue(newValue, forKey: "com.onety.fly.\(project_key).allname")
         }
     }
     
     var cacheShowingNames: [String] {
         get {
-            return (UserDefaults.standard.value(forKey: "com.onety.fly.show") as? [String]) ?? []
+            return (UserDefaults.standard.value(forKey: "com.onety.fly.\(project_key).show") as? [String]) ?? []
         }
         set {
-            UserDefaults.standard.setValue(newValue, forKey: "com.onety.fly.show")
+            UserDefaults.standard.setValue(newValue, forKey: "com.onety.fly.\(project_key).show")
             var result: [KKFlyViewItem] = []
             for name in cacheShowingNames {
                 if let index = items.lastIndex(where: {$0.name == name}) {
@@ -70,7 +72,10 @@ class KKFlyViewModel {
     /// 没有展开之前的 frame
     var lastFrame: CGRect!
     
-    init(delegate: KKFlyViewModelDelegate, viewType: KKFly.ViewType, items: [KKFlyViewItem]) {
+	init(delegate: KKFlyViewModelDelegate, viewType: KKFly.ViewType, items: [KKFlyViewItem], project_key: String?) {
+		if let pk = project_key {
+			self.project_key = pk
+		}
         self.viewType = viewType
         self.delegate = delegate
         self.items = items

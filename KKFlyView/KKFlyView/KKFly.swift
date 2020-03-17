@@ -24,10 +24,17 @@ open class KKFly: NSObject {
 
     /// 默认大小 (2, 100, 60, 60)
     open class func getDefault(viewType: KKFly.ViewType, items: [KKFlyViewItem], onSelected: ((KKFlyViewItem)->Void)?) -> KKFly {
-        let window = KKFly.init(frame: CGRect.init(x: UIScreen.main.bounds.size.width - 62, y: UIScreen.main.bounds.size.height / 2.0 - 30, width: 60, height: 60), viewType: viewType, items: items)
+		let window = KKFly.init(frame: CGRect.init(x: UIScreen.main.bounds.size.width - 62, y: UIScreen.main.bounds.size.height / 2.0 - 30, width: 60, height: 60), viewType: viewType, items: items, project_key: nil)
         window.onSelected = onSelected
         return window
     }
+	
+	/// 默认大小 (2, 100, 60, 60)
+	open class func getDefault(viewType: KKFly.ViewType, project_key: String, items: [KKFlyViewItem], onSelected: ((KKFlyViewItem)->Void)?) -> KKFly {
+		let window = KKFly.init(frame: CGRect.init(x: UIScreen.main.bounds.size.width - 62, y: UIScreen.main.bounds.size.height / 2.0 - 30, width: 60, height: 60), viewType: viewType, items: items, project_key: project_key)
+		window.onSelected = onSelected
+		return window
+	}
     
     open var onSelected: ((KKFlyViewItem)->Void)? {
         didSet {
@@ -37,6 +44,16 @@ open class KKFly: NSObject {
     
     /// 移动窗口的手势
     open var panGestureRecognizer: UIPanGestureRecognizer!
+	
+	/// 用来区分多个地方使用的时候情况
+	open var project_key: String {
+		get {
+			return viewModel.project_key
+		}
+		set {
+			viewModel.project_key = newValue
+		}
+	}
     
     @objc open var view: UIView!
     
@@ -47,10 +64,10 @@ open class KKFly: NSObject {
         return super.value(forKeyPath: keyPath)
     }
     
-    public init(frame: CGRect, viewType: KKFly.ViewType, items: [KKFlyViewItem]) {
+	public init(frame: CGRect, viewType: KKFly.ViewType, items: [KKFlyViewItem], project_key: String?) {
         super.init()
         
-        viewModel = KKFlyViewModel.init(delegate: self, viewType: viewType, items: items)
+		viewModel = KKFlyViewModel.init(delegate: self, viewType: viewType, items: items, project_key: project_key)
         viewModel.lastFrame = frame
         
         if viewType == .view {
@@ -151,7 +168,9 @@ open class KKFly: NSObject {
         settingVC.resultBlock = { [weak self] (items) in
             self?.viewModel.updateShowingItems(items: items)
         }
-        viewModel.getValidPresentingVC()?.present(UINavigationController.init(rootViewController: settingVC), animated: true, completion: nil)
+		let na = UINavigationController.init(rootViewController: settingVC)
+		na.modalPresentationStyle = .fullScreen
+		viewModel.getValidPresentingVC()?.present(na, animated: true, completion: nil)
     }
     
     // MARK: - private
