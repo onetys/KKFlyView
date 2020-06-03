@@ -272,15 +272,15 @@ extension KKFly: ViewDelegate  {
                     cx = swidth - width / 2.0 - 2
                 }
                 
-                if self.view.frame.origin.y <= 50 {
-                    cy = height / 2.0 + 22
-                } else if y >= sheight - height - 30 {
-                    cy = sheight - height / 2.0 - 2
-                } else {
-                    cy = y
-                }
-                
-                self.view.center = CGPoint.init(x: cx, y: cy)
+				if self.frame.origin.y <= 50 {
+					cy = height / 2.0 + 34
+				} else if y >= sheight - height - 30 {
+					cy = sheight - height / 2.0 - 2
+				} else {
+					cy = y
+				}
+				
+				self.center = CGPoint.init(x: cx, y: CGFloat.maximum(height / 2.0 + 34, cy))
             })
         }
     }
