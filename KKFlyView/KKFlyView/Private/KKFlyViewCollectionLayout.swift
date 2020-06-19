@@ -67,6 +67,10 @@ open class KKFlyViewCollectionLayout: UICollectionViewLayout {
         att.size = CGSize.init(width: width, height: width)
         
         att.center = centerAt(indexPath.row, count: count)
+		
+		if att.center == .zero {
+			att.isHidden = true
+		}
         
         return att
     }
@@ -100,7 +104,7 @@ open class KKFlyViewCollectionLayout: UICollectionViewLayout {
             } else if index == 3 {
                 return CGPoint.init(x: scrollSize.width / 2.0, y: scrollSize.height - width / 2.0 - itemPad)
             }
-        } else if count == 5 || count == 6 {
+        } else if count > 5 {
             
             let moreDown: CGFloat = -10
             
@@ -116,7 +120,9 @@ open class KKFlyViewCollectionLayout: UICollectionViewLayout {
                 return CGPoint.init(x: allWidth / 2.0, y: itemPad + width / 2.0)
             } else if index == 5 {
                 return CGPoint.init(x: allWidth / 2.0, y: allWidth - itemPad - width / 2.0)
-            }
+			} else {
+				return CGPoint.zero
+			}
         }
         return CGPoint.zero
     }

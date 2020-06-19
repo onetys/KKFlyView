@@ -11,6 +11,16 @@ import Foundation
 import UIKit
 
 open class KKFlySettingViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate {
+	
+	fileprivate let edg: CGFloat = 10
+	fileprivate var width: CGFloat {
+		let screenWidth = UIScreen.main.bounds.size.width
+		let screenHeight = UIScreen.main.bounds.size.height
+		return min(screenWidth, screenHeight, 441) - 2 * edg
+	}
+	fileprivate var padding: CGFloat {
+		return (width - 3 * 60) / 4.0
+	}
     
     var dismissBlock: (()->Void)?
     
@@ -21,11 +31,28 @@ open class KKFlySettingViewController: UIViewController, UICollectionViewDataSou
     var showItems: [KKFlyViewItem] = []
     
     lazy var collectionView: UICollectionView = {
-        let screenWidth = min(UIScreen.main.bounds.size.width, 441)
-        let realWidth = screenWidth - 2 * 10
+		
+		let layout: UICollectionViewLayout
+		if layoutType == .list {
+			let pad = self.padding
+			let l = UICollectionViewFlowLayout.init()
+			l.sectionInset = UIEdgeInsets.init(top: pad, left: pad, bottom: pad, right: pad)
+			l.minimumLineSpacing = pad
+			l.minimumInteritemSpacing = pad
+			layout = l
+		} else {
+			layout = KKFlyViewCollectionLayout()
+		}
+		
+        let realWidth = width
         let y: CGFloat = 64
-        let frame = CGRect.init(x: 10, y: y, width: realWidth, height: realWidth)
-        let c = UICollectionView.init(frame: frame, collectionViewLayout: KKFlyViewCollectionLayout())
+        let frame = CGRect.init(x: edg, y: 0, width: realWidth, height: realWidth)
+        let c = UICollectionView.init(frame: frame, collectionViewLayout: layout)
+		if layoutType == .list {
+			c.alwaysBounceVertical = true
+		}
+		c.showsVerticalScrollIndicator = false
+		c.showsHorizontalScrollIndicator = false
         c.delegate = self
         c.dataSource = self
         c.register(KKFlyViewCell.self, forCellWithReuseIdentifier: "cellID")
@@ -34,11 +61,16 @@ open class KKFlySettingViewController: UIViewController, UICollectionViewDataSou
     }()
     
     var lastStepper: Double = 50
+	
+	var layoutType: KKFly.LayoutType = .phone
     
-    required public init(items: [KKFlyViewItem], showItems: [KKFlyViewItem]) {
+	required public init(items: [KKFlyViewItem], showItems: [KKFlyViewItem], layoutType: KKFly.LayoutType) {
         super.init(nibName: nil, bundle: nil)
         self.items = items
         self.showItems = showItems
+		self.layoutType = layoutType
+		self.edgesForExtendedLayout = .init()
+		self.modalPresentationStyle = .fullScreen
     }
     
     required public init?(coder aDecoder: NSCoder) {
@@ -93,7 +125,6 @@ open class KKFlySettingViewController: UIViewController, UICollectionViewDataSou
     }
     
     func add() {
-        guard self.showItems.count < 6 else { return }
         self.showItems.append(KKFlyViewItem.phItem())
         reloadData()
     }
@@ -112,7 +143,7 @@ open class KKFlySettingViewController: UIViewController, UICollectionViewDataSou
     
     open func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cellID", for: indexPath) as! KKFlyViewCell
-        cell.showData(showItems[indexPath.row], dash: true)
+		cell.showData(showItems[indexPath.row], dash: true, showLabel: false, labelHeight: 0)
         return cell
     }
     

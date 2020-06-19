@@ -12,49 +12,58 @@ import UIKit
 
 class KKFlyViewCell: UICollectionViewCell {
     
-    var imageView: UIImageView!
+    var imageView: UIImageView = UIImageView.init()
+	
+	var label: UILabel = UILabel()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        
-        self.imageView = UIImageView.init()
-        
-        self.imageView.bounds = CGRect.init(x: 0, y: 0, width: frame.size.width - 8, height: frame.size.height - 8)
-        
-        self.imageView.center = CGPoint.init(x: frame.size.width / 2.0, y: frame.size.height / 2.0)
-        
-        self.imageView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-        
-        self.contentView.addSubview(self.imageView)
-        
-        self.layer.masksToBounds = true
-        
-        self.layer.cornerRadius = 3
+		label.textColor = .white
+		label.textAlignment = .center
+        contentView.addSubview(imageView)
+		contentView.addSubview(label)
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+	
+	override func layoutSubviews() {
+		super.layoutSubviews()
+	}
 
-    func showData(_ item: KKFlyViewItem, dash: Bool) {
-        
-        self.imageView.image = item.renderImage()
-        
+	func showData(_ item: KKFlyViewItem, dash: Bool, showLabel: Bool, labelHeight: CGFloat) {
+        imageView.image = item.renderImage()
+		label.text = item.isPHItem ? "" : item.name
         if let tint = item.tintColor {
-            self.imageView.tintColor = tint
+            imageView.tintColor = tint
         }
-        
         if dash {
-            
-            let imageView = UIImageView.init(image: self.dashImage(self.bounds))
-            
-            self.backgroundView = imageView
+			if frame.size.width > 0 {
+				let imageView = UIImageView.init(image: dashImage(bounds))
+				backgroundView = imageView
+			}
+			imageView.layer.masksToBounds = true
+			imageView.layer.cornerRadius = 3
         } else {
-            
-            self.backgroundView = nil
+			imageView.layer.masksToBounds = false
+			imageView.layer.cornerRadius = 0
+            backgroundView = nil
         }
-        
+		relayout(dash: dash, showLabel: showLabel, labelHeight: labelHeight)
     }
+	
+	func relayout(dash: Bool, showLabel: Bool, labelHeight: CGFloat) {
+		label.isHidden = !showLabel
+		if showLabel {
+			label.frame = CGRect.init(x: 0, y: frame.size.height - labelHeight, width: frame.size.width, height: labelHeight)
+		}
+		if !showLabel {
+			imageView.frame = CGRect(x: 3, y: 3, width: frame.size.width - 6, height: frame.size.height - 6)
+		} else {
+			imageView.frame = CGRect(x: 0, y: 0, width: frame.size.width, height: frame.size.height - labelHeight)
+		}
+	}
     
     fileprivate func dashImage(_ rect: CGRect) -> UIImage {
         

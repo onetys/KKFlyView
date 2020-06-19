@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		4D638A98AA6F4F8C15AC5EB0 /* Pods_KKFlyView.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F91DDC408B29CA0DF6CD6E82 /* Pods_KKFlyView.framework */; };
+		A24CF8AF249C562C003FED92 /* KKFlyViewMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A24CF8AE249C562C003FED92 /* KKFlyViewMenuView.swift */; };
+		A24CF8B1249C5774003FED92 /* Tool.swift in Sources */ = {isa = PBXBuildFile; fileRef = A24CF8B0249C5774003FED92 /* Tool.swift */; };
 		A2C449F3239F4BF9006AEBBB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2C449F2239F4BF9006AEBBB /* AppDelegate.swift */; };
 		A2C449F7239F4BF9006AEBBB /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2C449F6239F4BF9006AEBBB /* ViewController.swift */; };
 		A2C449FC239F4BF9006AEBBB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A2C449FB239F4BF9006AEBBB /* Assets.xcassets */; };
@@ -27,6 +29,8 @@
 
 /* Begin PBXFileReference section */
 		8106BFD83CAC289808F80F0E /* Pods-KKFlyView.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-KKFlyView.debug.xcconfig"; path = "Target Support Files/Pods-KKFlyView/Pods-KKFlyView.debug.xcconfig"; sourceTree = "<group>"; };
+		A24CF8AE249C562C003FED92 /* KKFlyViewMenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KKFlyViewMenuView.swift; sourceTree = "<group>"; };
+		A24CF8B0249C5774003FED92 /* Tool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tool.swift; sourceTree = "<group>"; };
 		A2C449EF239F4BF9006AEBBB /* KKFlyView.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = KKFlyView.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A2C449F2239F4BF9006AEBBB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A2C449F6239F4BF9006AEBBB /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -121,6 +125,8 @@
 				A2C44A23239F8A4D006AEBBB /* KKFlyViewModel.swift */,
 				A2C44A24239F8A4D006AEBBB /* KKFloatSettingViewController.swift */,
 				A2C44A25239F8A4D006AEBBB /* KKFlyViewCell.swift */,
+				A24CF8AE249C562C003FED92 /* KKFlyViewMenuView.swift */,
+				A24CF8B0249C5774003FED92 /* Tool.swift */,
 			);
 			path = Private;
 			sourceTree = "<group>";
@@ -257,10 +263,12 @@
 				A2C44A2E239F8A4D006AEBBB /* KKFlyViewCell.swift in Sources */,
 				A2C44A2C239F8A4D006AEBBB /* KKFlyViewModel.swift in Sources */,
 				A2C44A29239F8A4D006AEBBB /* KKFlyViewItem.swift in Sources */,
+				A24CF8B1249C5774003FED92 /* Tool.swift in Sources */,
 				A2C44A27239F8A4D006AEBBB /* KKFly.swift in Sources */,
 				A2C44A2A239F8A4D006AEBBB /* KKFlyViewCollectionLayout.swift in Sources */,
 				A2C44A2D239F8A4D006AEBBB /* KKFloatSettingViewController.swift in Sources */,
 				A2C449F3239F4BF9006AEBBB /* AppDelegate.swift in Sources */,
+				A24CF8AF249C562C003FED92 /* KKFlyViewMenuView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

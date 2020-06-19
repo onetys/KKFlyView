@@ -18,6 +18,15 @@ extension KKFly {
         
         case view
     }
+	
+	public enum LayoutType {
+		
+		/// 苹果小圆点的布局方式
+		case phone
+		
+		/// 列表方式
+		case list
+	}
 }
 
 open class KKFly: NSObject {
@@ -36,11 +45,15 @@ open class KKFly: NSObject {
 		return window
 	}
     
+	/// 点击菜单按钮的回调
     open var onSelected: ((KKFlyViewItem)->Void)? {
         didSet {
             viewModel.onSelected = onSelected
         }
     }
+	
+	/// 布局方式
+	open var layoutType: LayoutType = .phone
     
     /// 移动窗口的手势
     open var panGestureRecognizer: UIPanGestureRecognizer!
@@ -54,15 +67,21 @@ open class KKFly: NSObject {
 			viewModel.project_key = newValue
 		}
 	}
-    
-    @objc open var view: UIView!
-    
-    open override func value(forKeyPath keyPath: String) -> Any? {
-        if keyPath == "_view" {
-            return view
-        }
-        return super.value(forKeyPath: keyPath)
-    }
+	
+	/// view
+	@objc open var view: UIView!
+	
+	fileprivate let edg: CGFloat = 10
+	fileprivate var width: CGFloat {
+		let screenWidth = UIScreen.main.bounds.size.width
+		let screenHeight = UIScreen.main.bounds.size.height
+		return min(screenWidth, screenHeight, 441) - 2 * edg
+	}
+	fileprivate var padding: CGFloat {
+		return (width - 3 * itemWidth) / 4.0
+	}
+	fileprivate let itemWidth: CGFloat = 60
+	fileprivate let titleHeight: CGFloat = 30
     
 	public init(frame: CGRect, viewType: KKFly.ViewType, items: [KKFlyViewItem], project_key: String?) {
         super.init()
@@ -95,6 +114,13 @@ open class KKFly: NSObject {
     required public init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+	
+	open override func value(forKeyPath keyPath: String) -> Any? {
+		if keyPath == "_view" {
+			return view
+		}
+		return super.value(forKeyPath: keyPath)
+	}
 
     // MARK: - expend
     open func expend() {
@@ -161,7 +187,7 @@ open class KKFly: NSObject {
             return
         }
         viewModel.setting = true
-        let settingVC = KKFlySettingViewController(items: viewModel.items, showItems: viewModel.showingItems)
+		let settingVC = KKFlySettingViewController(items: viewModel.items, showItems: viewModel.showingItems, layoutType: layoutType)
         settingVC.dismissBlock = { [weak self] in
             self?.viewModel.setting = false
         }
@@ -192,11 +218,8 @@ open class KKFly: NSObject {
     
     
     fileprivate func commitInit() {
-        
         menunView = KKFlyViewMenuView.defaultMenuView()
-        
         view.addSubview(menunView)
-        
         menunView.alpha = 0.5
     }
 }
@@ -272,7 +295,7 @@ extension KKFly: ViewDelegate  {
                     cx = swidth - width / 2.0 - 2
                 }
                 
-				if self.frame.origin.y <= 50 {
+				if self.view.frame.origin.y <= 50 {
 					cy = height / 2.0 + 34
 				} else if y >= sheight - height - 30 {
 					cy = sheight - height / 2.0 - 2
@@ -280,7 +303,7 @@ extension KKFly: ViewDelegate  {
 					cy = y
 				}
 				
-				self.center = CGPoint.init(x: cx, y: CGFloat.maximum(height / 2.0 + 34, cy))
+				self.view.center = CGPoint.init(x: cx, y: CGFloat.maximum(height / 2.0 + 34, cy))
             })
         }
     }
@@ -291,33 +314,38 @@ extension KKFly: ViewDelegate  {
 extension KKFly: UICollectionViewDelegate, UICollectionViewDataSource {
     
     fileprivate func getCollectionView() -> UICollectionView {
-
-        let coll = UICollectionView.init(frame: CGRect.zero, collectionViewLayout: KKFlyViewCollectionLayout())
-        
+		let layout: UICollectionViewLayout
+		if layoutType == .list {
+			let pad = self.padding
+			let l = UICollectionViewFlowLayout.init()
+			l.sectionInset = UIEdgeInsets.init(top: pad, left: pad, bottom: pad, right: pad)
+			l.minimumLineSpacing = pad
+			l.minimumInteritemSpacing = pad
+			l.itemSize = CGSize(width: itemWidth, height: itemWidth + titleHeight)
+			layout = l
+		} else {
+			layout = KKFlyViewCollectionLayout()
+		}
+        let coll = UICollectionView.init(frame: CGRect.zero, collectionViewLayout: layout)
+		if layoutType == .list {
+			coll.alwaysBounceVertical = true
+		}
+		coll.showsVerticalScrollIndicator = false
+		coll.showsHorizontalScrollIndicator = false
         coll.delegate = self
-        
         coll.dataSource = self
-        
         coll.backgroundColor = UIColor.clear
-        
         coll.register(KKFlyViewCell.classForCoder(), forCellWithReuseIdentifier: "cellId")
-        
         return coll
     }
     
     fileprivate func getMenuItemsFrame() -> CGRect {
-        
+		let width = self.width
         let screenWidth = UIScreen.main.bounds.size.width
-        
         let screenHeight = UIScreen.main.bounds.size.height
-        
-        let realWidth = min(screenWidth, 441) - 2 * 10
-        
-        let x = (screenWidth - realWidth) / 2.0
-        
-        let y = (screenHeight - realWidth) / 2.0
-        
-        return CGRect.init(x: x, y: y, width: realWidth, height: realWidth)
+        let x = (screenWidth - width) / 2.0
+        let y = (screenHeight - width) / 2.0
+        return CGRect.init(x: x, y: y, width: width, height: width)
     }
     
     fileprivate func getMenuItemsView() -> UIView {
@@ -353,7 +381,7 @@ extension KKFly: UICollectionViewDelegate, UICollectionViewDataSource {
     
     public func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cellId", for: indexPath) as! KKFlyViewCell
-        cell.showData(viewModel.showingItems[indexPath.row], dash: false)
+		cell.showData(viewModel.showingItems[indexPath.row], dash: false, showLabel: layoutType == .list, labelHeight: self.titleHeight)
         if viewModel.showingItems[indexPath.row].isPHItem {
             cell.imageView.image = nil
         }
@@ -369,57 +397,6 @@ extension KKFly: KKFlyViewModelDelegate {
     
     public func reloadData() {
         collectionView.reloadData()
-    }
-}
-
-fileprivate class KKFlyViewMenuView: UIView {
-    
-    open class func defaultMenuView() -> KKFlyViewMenuView {
-        let window = KKFlyViewMenuView.init(frame: CGRect(x: 0, y: 0, width: 60, height: 60))
-        window.layer.cornerRadius = 13
-        window.layer.masksToBounds = true
-        return window
-    }
-    
-    override open func draw(_ rect: CGRect) {
-        
-        super.draw(rect)
-        
-        guard let context = UIGraphicsGetCurrentContext() else {
-            return
-        }
-        
-        let width = rect.size.width
-        let height = rect.size.height
-        
-        let lineWidth: CGFloat = 4
-        
-        context.setFillColor(UIColor.init(red: 90.0 / 255.0, green: 90.0 / 255.0, blue: 90.0 / 255.0, alpha: 1).cgColor)
-        
-        context.fill(rect)
-        
-        let colors = [
-            UIColor.init(red: 170.0 / 255.0, green: 170.0 / 255.0, blue: 170.0 / 255.0, alpha: 1),
-            UIColor.init(red: 120.0 / 255.0, green: 120.0 / 255.0, blue: 120.0 / 255.0, alpha: 1)]
-        
-        context.setLineWidth(lineWidth)
-        
-        for i in 0...colors.count-1 {
-            
-            context.setStrokeColor(colors[i].cgColor)
-            
-            context.addArc(center: CGPoint.init(x: width / 2.0, y: height / 2.0), radius: 16 + lineWidth / 2.0 + CGFloat(i) * lineWidth, startAngle: CGFloat.pi * 2, endAngle: 0, clockwise: true)
-            
-            context.strokePath()
-        }
-        
-        context.setFillColor(UIColor.clear.cgColor)
-        
-        context.addArc(center: CGPoint.init(x: width / 2.0, y: height / 2.0), radius: 16 - lineWidth / 2.0, startAngle: CGFloat.pi * 2, endAngle: 0, clockwise: true)
-        
-        context.fillPath()
-        
-        appIcon()?.draw(in: CGRect(x: (rect.size.width - 2 * 16) / 2.0, y: (rect.size.height - 2 * 16) / 2.0, width: 32, height: 32))
     }
 }
 
@@ -467,27 +444,4 @@ func flyViewImage(name: String) -> UIImage? {
         return UIImage(contentsOfFile: path)
     }
     return nil
-}
-
-fileprivate func appIcon() -> UIImage? {
-    guard let dic = Bundle.main.infoDictionary else {
-        return nil
-    }
-    guard let bundleIcon = dic["CFBundleIcons"] as? [String: Any],
-        let primary = bundleIcon["CFBundlePrimaryIcon"] as? [String: Any],
-        let files = primary["CFBundleIconFiles"] as? [String] else {
-        return nil
-    }
-    guard let last =  files.last else {
-        return nil
-    }
-    guard let image = UIImage(named: last) else {
-        return nil
-    }
-    UIGraphicsBeginImageContextWithOptions(image.size, false, UIScreen.main.scale)
-    UIBezierPath.init(roundedRect: CGRect.init(origin: .zero, size: image.size), cornerRadius: min(image.size.width, image.size.height)).addClip()
-    image.draw(in: CGRect.init(origin: .zero, size: image.size))
-    let img = UIGraphicsGetImageFromCurrentImageContext()
-    UIGraphicsEndImageContext()
-    return img
 }
