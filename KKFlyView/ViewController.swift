@@ -41,13 +41,6 @@ class ViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        
-        let request = manager.request(URL(string: "https://apk.poizon.com/du_rn/config/ios_release.json")!,
-                                            method: HTTPMethod.get,
-                                            parameters: nil,
-                                            encoding: JSONEncoding.default,
-                                            headers: ["token": "hhh"])
-        request.resume()
 		
     }
     
